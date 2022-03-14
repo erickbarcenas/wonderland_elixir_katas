@@ -102,9 +102,8 @@ defmodule AlphabetCipher.Coder do
 
         # Aquí podría iniciar un FOR
 
-        data
-        |> Enum.with_index
-        |> Enum.each(fn({current_tuple, index}) ->
+        encode_message = data |> Enum.with_index
+        |> Enum.map(fn({current_tuple, index}) ->
 
           #current_tuple = data |> Enum.at(index)
 
@@ -113,10 +112,10 @@ defmodule AlphabetCipher.Coder do
 
           row = alphabet_rows[String.to_atom(ct_first)]
           col = alphabet_cols[String.to_atom(ct_second)]
-          new_letter = row |> Enum.at(col)
-          IO.puts(new_letter)
-
+          row |> Enum.at(col) # new_letter
         end)
+        IO.puts("---------------------------------------------")
+        IO.puts("The encoded message is now #{encode_message}")
       end
 
 
