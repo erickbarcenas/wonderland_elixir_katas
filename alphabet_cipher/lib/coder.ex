@@ -80,54 +80,74 @@ defmodule AlphabetCipher.Coder do
     |> Map.new(fn k -> {k, ''} end)
   end
 
-  def encode(keyword, message) do
+  def create_data(keyword, message) do
     # convierto a lista y después uno los textos
     key_joined = str_joined(keyword)
     msg_joined = str_joined(message)
 
-    if String.length(key_joined) > 0 and String.length(msg_joined) > 0 do
-      # Dependiendo de la longitud del mensaje
-      # se crea la repetición de la keyword con
-      # la misma longitud que el mensaje
-      key_repeated = repeat_str(key_joined, msg_joined)
+    if String.length(key_joined) < 0 do
+      IO.puts("Por favor ingrese una clave")
+    end
+
+    if String.length(msg_joined) < 0 do
+      IO.puts("Por favor ingrese un mensaje")
+    end
+
+    # Dependiendo de la longitud del mensaje
+    # se crea la repetición de la keyword con
+    # la misma longitud que el mensaje
+    key_repeated = repeat_str(key_joined, msg_joined)
 
 
-      if String.length(key_repeated) == String.length(msg_joined) do
-        # Ahora se debe crear un mapa donde la llave es cada letra de
-        # la palabra clave y el valor cada letra del mensaje
-        list_key_repeated = key_repeated |> String.graphemes()
-        list_msg = msg_joined |> String.graphemes()
-        data = Enum.zip(list_key_repeated, list_msg)
+    if String.length(key_repeated) != String.length(msg_joined) do
+      IO.puts('Error')
+    end
 
+      # Ahora se debe crear un mapa donde la llave es cada letra de
+      # la palabra clave y el valor cada letra del mensaje
+      list_key_repeated = key_repeated |> String.graphemes()
+      list_msg = msg_joined |> String.graphemes()
+      data = Enum.zip(list_key_repeated, list_msg)
+  end
 
-        # Aquí podría iniciar un FOR
+  def encode(keyword, message) do
+      data = create_data(keyword, message)
 
-        encode_message = data |> Enum.with_index
-        |> Enum.map(fn({current_tuple, index}) ->
+      encode_message =
+      data
+      |> Enum.with_index
+      |> Enum.map(fn({current_tuple, index}) ->
 
           #current_tuple = data |> Enum.at(index)
-
           ct_first = elem(current_tuple, 0)
           ct_second = elem(current_tuple, 1)
 
           row = alphabet_rows[String.to_atom(ct_first)]
           col = alphabet_cols[String.to_atom(ct_second)]
           row |> Enum.at(col) # new_letter
-        end)
-        IO.puts("---------------------------------------------")
-        IO.puts("The encoded message is now #{encode_message}")
-      end
-
-
-
-    else
-      IO.puts('Por favor ingrese un texto')
-    end
-
+      end)
+        #IO.puts("---------------------------------------------")
+        #IO.puts("The encoded message is now #{encode_message}")
+      encode_message |> Enum.join("")
   end
 
   def decode(keyword, message) do
-    "decodeme"
+    data = create_data(keyword, message)
+    
+    decode_message =
+      data
+      |> Enum.with_index
+      |> Enum.map(fn({current_tuple, index}) ->
+        ct_first = elem(current_tuple, 0)
+        ct_second = elem(current_tuple, 1)
+
+        row = alphabet_rows[String.to_atom(ct_first)]
+        idx_col = Enum.find_index(row, fn x ->  x == ct_second end)
+
+        letter_col = alphabet_cols() |> Enum.find(fn {_, val} -> val == idx_col end) |> elem(0)
+        Atom.to_string(letter_col)
+      end)
+    decode_message |> Enum.join("")
   end
 
   def decipher(cipher, message) do

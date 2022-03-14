@@ -81,8 +81,13 @@ To decode, the person would use the secret keyword and do the opposite.
 
 ```elixir
 AlphabetCipher.Coder.encode("Hola", "Saludos")
+"zowukcd"
 ```
 
+```elixir
+iex> AlphabetCipher.Coder.decode("Hola", "zowukcd")
+"saludos"
+```
 
 ### ExUnit
 ```
