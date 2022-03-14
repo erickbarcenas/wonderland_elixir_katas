@@ -70,8 +70,10 @@ defmodule AlphabetCipher.Coder do
   def encode(keyword, message) do
     msg = String.downcase(message) |> String.split() |> Enum.join("")
 
-    if String.length(msg) > 0 do
+    if Enum.count(msg) > 0 do
       repeat_message(msg)
+    else
+      IO.puts('Por favor ingrese un texto')
     end
 
   end

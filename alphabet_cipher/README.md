@@ -75,6 +75,15 @@ To decode, the person would use the secret keyword and do the opposite.
 - Run the tests with `mix test`
 - Make the tests pass!
 
+
+## Execute
+
+
+```elixir
+AlphabetCipher.Coder.encode("Hola", "Saludos")
+```
+
+
 ## Solutions
 
 Once you have your kata solution, you are welcome to submit a link to your repo to share here in this section with others.
