@@ -60,18 +60,36 @@ defmodule AlphabetCipher.Coder do
     }
   end
 
-  def repeat_message(msg) do
-    desire_len = 29
-    msg_len = String.length(msg)
-    String.duplicate(msg, msg_len * Float.round(desire_len / msg_len, 0) |> trunc())
-    |> String.slice(0..desire_len - 1)
+  def repeat_str(key_joined, msg_joined) do
+    new_key_desire_len = String.length(msg_joined)
+    current_key_len = String.length(key_joined)
+
+    String.duplicate(key_joined, new_key_desire_len * Float.round(new_key_desire_len / current_key_len, 0) |> trunc())
+    |> String.slice(0..new_key_desire_len - 1)
+  end
+
+  def str_joined(str) do
+    String.downcase(str) |> String.split() |> Enum.join("")
+  end
+
+  def create_map(str) do
+    str
+    |> String.split()
+    |> Map.new(fn k -> {k, ''} end)
   end
 
   def encode(keyword, message) do
-    msg = String.downcase(message) |> String.split() |> Enum.join("")
+    # convierto a lista y después uno los textos
+    key_joined = str_joined(keyword)
+    msg_joined = str_joined(message)
 
-    if String.length(msg) > 0 do
-      repeat_message(msg)
+    if String.length(key_joined) > 0 and String.length(msg_joined) > 0 do
+      # Dependiendo de la longitud del mensaje
+      # se crea la repetición de la keyword con
+      # la misma longitud que el mensaje
+      key_repeated = repeat_str(key_joined, msg_joined)
+      key_repeated
+
     else
       IO.puts('Por favor ingrese un texto')
     end
