@@ -126,14 +126,12 @@ defmodule AlphabetCipher.Coder do
           col = alphabet_cols[String.to_atom(ct_second)]
           row |> Enum.at(col) # new_letter
       end)
-        #IO.puts("---------------------------------------------")
-        #IO.puts("The encoded message is now #{encode_message}")
       encode_message |> Enum.join("")
   end
 
   def decode(keyword, message) do
     data = create_data(keyword, message)
-    
+
     decode_message =
       data
       |> Enum.with_index
@@ -151,6 +149,33 @@ defmodule AlphabetCipher.Coder do
   end
 
   def decipher(cipher, message) do
-    "decypherme"
+
+    l_cipher = cipher |> String.graphemes()
+    l_message = message |> String.graphemes()
+
+    if String.length(cipher) != String.length(message), do: IO.puts(:error)
+
+    key =
+      l_cipher
+      |> Enum.with_index
+      |> Enum.map(fn({current_tuple, index}) ->
+        one_cipher = l_cipher |> Enum.at(index)
+        one_message = l_message |> Enum.at(index)
+        row = alphabet_rows[String.to_atom(one_message)]
+        idx_col = Enum.find_index(row, fn x ->  x == one_cipher end)
+        letter_col = alphabet_cols() |> Enum.find(fn {_, val} -> val == idx_col end) |> elem(0)
+        Atom.to_string(letter_col)
+      end)
+
+    len_ley = key |> Enum.count()
+
+    results = Enum.map(1..Enum.count(key) -1, fn index ->
+      pairs = key |> Enum.chunk_every(index)
+      if Enum.at(pairs, 0) == Enum.at(pairs, 1) do
+        Enum.at(pairs, 0) |> Enum.join("")
+      end
+    end)
+
+    Enum.filter(results, & !is_nil(&1)) |> Enum.at(0)
   end
 end

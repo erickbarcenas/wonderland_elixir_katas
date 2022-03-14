@@ -16,11 +16,11 @@ defmodule AlphabetCipher.CoderTest do
            decode("vigilance", "hmkbxebpxpmyllyrxiiqtoltfgzzv")
   end
 
-  #test "Can extract the secret keyword given an encrypted message and the original message" do
-  #  assert "scones" ==
-  #         decipher("hcqxqqtqljmlzhwiivgbsapaiwcenmyu", "packmyboxwithfivedozenliquorjugs")
-  #  assert "vigilance" ==
-  #         decipher("opkyfipmfmwcvqoklyhxywgeecpvhelzg", "thequickbrownfoxjumpsoveralazydog")
-  #end
+  test "Can extract the secret keyword given an encrypted message and the original message" do
+    assert "scones" ==
+           decipher("hcqxqqtqljmlzhwiivgbsapaiwcenmyu", "packmyboxwithfivedozenliquorjugs")
+    assert "vigilance" ==
+           decipher("opkyfipmfmwcvqoklyhxywgeecpvhelzg", "thequickbrownfoxjumpsoveralazydog")
+  end
 
 end
