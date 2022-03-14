@@ -1,7 +1,7 @@
 defmodule AlphabetCipher.Coder do
 
-  def gen_matrix() do
-    alphabet_cols = %{
+  def alphabet_cols() do
+    %{
       a: 0,
       b: 1,
       c: 2,
@@ -29,8 +29,10 @@ defmodule AlphabetCipher.Coder do
       y: 24,
       z: 25
     }
+  end
 
-    alphabet_rows = %{
+  def alphabet_rows() do
+    %{
       a: String.graphemes("abcdefghijklmnopqrstuvwxyz"),
       b: String.graphemes("bcdefghijklmnopqrstuvwxyza"),
       c: String.graphemes("cdefghijklmnopqrstuvwxyzab"),
@@ -88,7 +90,28 @@ defmodule AlphabetCipher.Coder do
       # se crea la repetición de la keyword con
       # la misma longitud que el mensaje
       key_repeated = repeat_str(key_joined, msg_joined)
-      key_repeated
+
+
+      if String.length(key_repeated) == String.length(msg_joined) do
+        # Ahora se debe crear un mapa donde la llave es cada letra de
+        # la palabra clave y el valor cada letra del mensaje
+        list_key_repeated = key_repeated |> String.graphemes() |> IO.inspect()
+        list_msg = msg_joined |> String.graphemes() |> IO.inspect()
+        data = Enum.zip(list_key_repeated, list_msg)
+
+        current_tuple = data |> Enum.at(0)
+        ct_first = elem(current_tuple, 0)
+        ct_second = elem(current_tuple, 1)
+
+        row = alphabet_rows[String.to_atom(ct_first)]
+        col = alphabet_cols[String.to_atom(ct_second)]
+
+        new_letter = row |> Enum.at(col)
+        new_letter
+
+      end
+
+
 
     else
       IO.puts('Por favor ingrese un texto')
