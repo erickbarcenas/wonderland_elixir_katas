@@ -95,20 +95,28 @@ defmodule AlphabetCipher.Coder do
       if String.length(key_repeated) == String.length(msg_joined) do
         # Ahora se debe crear un mapa donde la llave es cada letra de
         # la palabra clave y el valor cada letra del mensaje
-        list_key_repeated = key_repeated |> String.graphemes() |> IO.inspect()
-        list_msg = msg_joined |> String.graphemes() |> IO.inspect()
+        list_key_repeated = key_repeated |> String.graphemes()
+        list_msg = msg_joined |> String.graphemes()
         data = Enum.zip(list_key_repeated, list_msg)
 
-        current_tuple = data |> Enum.at(0)
-        ct_first = elem(current_tuple, 0)
-        ct_second = elem(current_tuple, 1)
 
-        row = alphabet_rows[String.to_atom(ct_first)]
-        col = alphabet_cols[String.to_atom(ct_second)]
+        # Aquí podría iniciar un FOR
 
-        new_letter = row |> Enum.at(col)
-        new_letter
+        data
+        |> Enum.with_index
+        |> Enum.each(fn({current_tuple, index}) ->
 
+          #current_tuple = data |> Enum.at(index)
+
+          ct_first = elem(current_tuple, 0)
+          ct_second = elem(current_tuple, 1)
+
+          row = alphabet_rows[String.to_atom(ct_first)]
+          col = alphabet_cols[String.to_atom(ct_second)]
+          new_letter = row |> Enum.at(col)
+          IO.puts(new_letter)
+
+        end)
       end
 
 
