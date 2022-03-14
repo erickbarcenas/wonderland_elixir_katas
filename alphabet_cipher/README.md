@@ -84,6 +84,12 @@ AlphabetCipher.Coder.encode("Hola", "Saludos")
 ```
 
 
+### ExUnit
+```
+mix test
+```
+
+
 ## Solutions
 
 Once you have your kata solution, you are welcome to submit a link to your repo to share here in this section with others.
