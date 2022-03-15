@@ -9,81 +9,70 @@ defmodule CardGameWar.Game do
   # Card from every figure
   def ranks, do: [2, 3, 4, 5, 6, 7, 8, 9, 10, :jack, :queen, :king, :ace]
 
+  # [{:jack, 11}, {:queen, 12}, {:king, 13}, {:king, 14}]
+
   def cards do
     for suit <- suits(), rank <- ranks() do
       %Card{suit: suit, rank: rank}
     end
+    |> Enum.shuffle()
   end
 
 
   # reparte cartas
-  def cards_deals(num) do
-    if num < 1 and num > 5, do: IO.puts(:error)
-    cards = cards() |> IO.inspect()
-    per_capita = Enum.count(cards) / num |> round()
-    cards |> Enum.shuffle() |> Enum.chunk_every(per_capita)
+  def deal() do
+    players = 2
+    cards = cards()
+    hand_size = Enum.count(cards) / players |> round()
+    cards |> Enum.chunk_every(hand_size)
   end
 
-  def compare_values(card1, card2) do
-    if card1 == card2 do
-      IO.puts("Implementar lógica")
-    end
-
-    if card1 > card2 do
-      # analizar el tipo de carta del mazo
-      # -rey
-      # -
-      # -
-      # retornar
-      {
-        [ card1 | [card2] ],
-        []
-      }
-    else
-      {
-        [],
-        [ card1 | [card2] ]
-      }
-    end
+  defp push(lst, item), do: List.insert_at(lst, 0, item) |> List.flatten()
+  # defp pop(lst), do: List.pop_at(lst, 0)
 
 
+
+  def game_play() do
+    [player1_deck | player2_deck] = deal()
+    play_war({player1_deck, player2_deck |> List.flatten})
   end
 
-  def compare(card1, card2) do
+
+  def play_war({player1_deck, player2_deck}) do
+    case {player1_deck, player2_deck} do
+      {_, []} ->
+        "Player 1 wins!"
+      {[], _} ->
+        "Player 2 wins!"
+      _ ->
+        [p1_card | player1_deck] = player1_deck
+        [p2_card | player2_deck] = player2_deck
+
+
+        #IO.puts("#{p1_card.rank} vs #{p2_card.rank}")
+
+        if higher_card(p1_card, p2_card) == p1_card do
+          player1_deck = player1_deck |> push([p1_card, p2_card])
+          play_war({player1_deck, player2_deck})
+        else
+          player2_deck = player2_deck |> push([p1_card, p2_card])
+          play_war({player1_deck, player2_deck})
+        end
+    end
+  end
+
+
+  def higher_card(p1_card, p2_card) do
     cond do
-      card1 > card2 -> 1
-      card1 < card2 -> 2
-      true -> 0
-    end
-  end
-
-  def winner(number) do
-    if number == 1 do
-      "Player 1 win!"
-    else
-      "Player 2 win!"
-    end
-  end
-
-
-  def game() do
-    # para dos jugadores
-    cards = cards_deals(2)
-    cards_game_1 = cards |> List.first()
-    cards_won_1 = []
-    cards_game_2 = cards |> List.last()
-    cards_won_2 = []
-
-    cards_game_1
-
-    battle = Enum.map(0..25, fn idx ->
-      card1 = cards_game_1 |> Enum.at(idx)
-      card2 = cards_game_2 |> Enum.at(idx)
-      {[card1.rank, card2.rank], compare(card1, card2)}
-    end)
-
-
-    %{player1: Enum.filter(battle, fn {k, v} -> v == 1 end)}
-
+      p1_card.rank > p2_card.rank -> p1_card
+      p2_card.rank > p1_card.rank -> p2_card
+      #p1_card == p2_card -> IO.inspect(1)
+      true ->
+        if Enum.find_index(suits(), fn suit1 -> suit1 == p1_card.suit end) > Enum.find_index(suits(), fn suit2 -> suit2  == p2_card.suit end) do
+          p1_card
+        else
+          p2_card
+        end
+      end
   end
 end
