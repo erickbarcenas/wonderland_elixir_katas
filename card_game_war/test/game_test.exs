@@ -46,7 +46,14 @@ defmodule CardGameWar.GameTest do
   end
 
   test "the player loses when they run out of cards" do
-    assert Game.play_war({:player1_deck, :player2_deck}) == ("Player 1 wins!" or "Player 2 wins!")
+    data = [
+      %CardGameWar.Game.Card{rank: :ace, suit: :diamond},
+      %CardGameWar.Game.Card{rank: 9, suit: :club},
+      %CardGameWar.Game.Card{rank: 7, suit: :heart},
+      %CardGameWar.Game.Card{rank: :ace, suit: :spade},
+      %CardGameWar.Game.Card{rank: :jack, suit: :diamond}]
+    assert Game.play_war({data, []}) == ("Player 1 wins!")
+    assert Game.play_war({[], data}) == ("Player 2 wins!")
   end
 
 end

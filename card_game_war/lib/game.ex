@@ -62,11 +62,17 @@ defmodule CardGameWar.Game do
   end
 
 
+  def get_index(card) do
+    Enum.find_index(ranks(), fn rank -> rank == card.rank end)
+  end
+
   def higher_card(p1_card, p2_card) do
+    idx1 = get_index(p1_card)
+    idx2 = get_index(p2_card)
+
     cond do
-      p1_card.rank > p2_card.rank -> p1_card
-      p2_card.rank > p1_card.rank -> p2_card
-      #p1_card == p2_card -> IO.inspect(1)
+      idx1 > idx2 -> p1_card
+      idx2 > idx1 -> p2_card
       true ->
         if Enum.find_index(suits(), fn suit1 -> suit1 == p1_card.suit end) > Enum.find_index(suits(), fn suit2 -> suit2  == p2_card.suit end) do
           p1_card
