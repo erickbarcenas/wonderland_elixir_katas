@@ -159,9 +159,13 @@ defmodule AlphabetCipher.Coder do
       l_cipher
       |> Enum.with_index
       |> Enum.map(fn({current_tuple, index}) ->
+
         one_cipher = l_cipher |> Enum.at(index)
         one_message = l_message |> Enum.at(index)
-        row = alphabet_rows[String.to_atom(one_message)]
+
+        
+        one_message
+        row = alphabet_rows[String.to_atom()]
         idx_col = Enum.find_index(row, fn x ->  x == one_cipher end)
         letter_col = alphabet_cols() |> Enum.find(fn {_, val} -> val == idx_col end) |> elem(0)
         Atom.to_string(letter_col)
