@@ -4,6 +4,10 @@ defmodule Doublets.SolverTest do
 
   test "with word links found" do
        # ["head", "heal", "teal", "muta", "task", "quat", "tell", "tall", "tail"]
+       # ["head", "heal", "teal", "muta", "quat", "tell", "tall", "tail"]
+
+       
+       # ["head", "heal", "teal", "quat", "tell", "tall", "tail"]
     assert ["head", "heal", "teal", "tell", "tall", "tail"] ==
            doublets("head", "tail")
 

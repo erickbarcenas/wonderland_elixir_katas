@@ -31,7 +31,7 @@ defmodule Doublets.Solver do
 
     len_sw = starting_word |> String.length()
     len_ew = ending_word |> String.length()
-    if len_sw != len_ew, do: IO.inspect({:error, "Words aren't the same lengths"})
+    if len_sw != len_ew, do: []
 
     # Check if the words are in the dictionary
     mini_corpus_indexed =
@@ -53,7 +53,22 @@ defmodule Doublets.Solver do
       |> Enum.at(0) |> elem(1) end)
       |> Enum.map(fn tuple -> elem(tuple, 0) |> elem(0) end)
 
-    response
+    mini2 =
+      response
+      |> Enum.map(fn type -> {type, String.jaro_distance(type, ending_word)} end)
+      |> Enum.sort_by(fn tuple -> elem(tuple, 1) end, :asc) # &elem(&1, 1)
+      |> Enum.filter(fn tuple -> elem(tuple, 1) > 0.0 end)
+      |> Enum.with_index()
+
+    #goal2 =
+    #  mini2
+    #  |> Enum.filter(fn tuple -> elem(tuple, 0) |> elem(0) == ending_word end)
+
+    #res2 =
+    #  mini2
+    #  |> Enum.filter(fn tuple -> elem(tuple, 1) <= goal
+    #  |> Enum.at(0) |> elem(1) end)
+    #  |> Enum.map(fn tuple -> elem(tuple, 0) |> elem(0) end)
 
    end
 
