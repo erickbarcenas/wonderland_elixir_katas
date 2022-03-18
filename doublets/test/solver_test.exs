@@ -3,6 +3,7 @@ defmodule Doublets.SolverTest do
   import Doublets.Solver
 
   test "with word links found" do
+       # ["head", "heal", "teal", "muta", "task", "quat", "tell", "tall", "tail"]
     assert ["head", "heal", "teal", "tell", "tall", "tail"] ==
            doublets("head", "tail")
 

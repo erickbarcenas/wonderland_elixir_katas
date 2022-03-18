@@ -1,5 +1,9 @@
 defmodule Doublets.Solver do
+@moduledoc """
+  Cuán similares son dos cadenas de caracteres
+  Replace `String.levenshtein_distance/2` with `String.jaro_distance/2`
 
+"""
   def words do
     "./resources/words.txt"
       |> File.stream!
@@ -30,9 +34,27 @@ defmodule Doublets.Solver do
     if len_sw != len_ew, do: IO.inspect({:error, "Words aren't the same lengths"})
 
     # Check if the words are in the dictionary
-    words
-    |> clean()
+    mini_corpus_indexed =
+      words
+      |> clean()
+      |> Enum.filter(fn type -> String.length(type) == String.length(starting_word) end)
+      |> Enum.map(fn type -> {type, String.jaro_distance(type, starting_word)} end)
+      |> Enum.sort_by(fn tuple -> elem(tuple, 1) end, :desc) # &elem(&1, 1)
+      |> Enum.with_index()
 
-  end
+
+    goal =
+      mini_corpus_indexed
+      |> Enum.filter(fn tuple -> elem(tuple, 0) |> elem(0) == ending_word end)
+
+    response =
+      mini_corpus_indexed
+      |> Enum.filter(fn tuple -> elem(tuple, 1) <= goal
+      |> Enum.at(0) |> elem(1) end)
+      |> Enum.map(fn tuple -> elem(tuple, 0) |> elem(0) end)
+
+    response
+
+   end
 
 end
