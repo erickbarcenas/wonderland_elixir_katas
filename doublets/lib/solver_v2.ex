@@ -1,4 +1,4 @@
-defmodule Doublets.Solver do
+defmodule Doublets.SolverV2 do
 
   @words "./resources/words.txt"
     |> File.read!
@@ -11,13 +11,15 @@ defmodule Doublets.Solver do
   def doublets_impl([], _word_2), do: []
 
   def doublets_impl(word_seqs, word_2) do
-    IO.inspect(word_seqs, label: "input")
+    # IO.inspect(word_seqs, label: "input")
 
     seqs_variants =
       Enum.flat_map(word_seqs, fn seq -> complete_seq_variants(seq) end)
-      |> IO.inspect(label: "variants")
+      # |> IO.inspect(label: "variants")
 
-    case find_solution(seqs_variants, word_2) do
+
+    find = find_solution(seqs_variants, word_2) # |> IO.inspect(label: "find_solution")
+    case find do
       nil -> doublets_impl(seqs_variants, word_2)
       sol -> sol
     end
@@ -28,12 +30,17 @@ defmodule Doublets.Solver do
   end
 
   def complete_seq_variants(word_seq) do
-    variants =
-      word_seq
-      |> last_word()
-      |> find_variants()
-      |> Enum.filter(fn w -> not(w in word_seq) end)
-    for v <- variants, do: word_seq ++ [v]
+    if Enum.count(word_seq) > 0 do
+        variants =
+            word_seq
+            |> last_word()
+            |> find_variants()
+            |> Enum.filter(fn w -> not(w in word_seq) end)
+            for v <- variants, do: word_seq ++ [v]
+    else
+        []
+    end
+    
   end
 
   def find_variants(word) do
