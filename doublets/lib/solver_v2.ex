@@ -56,5 +56,11 @@ defmodule Doublets.Solver do
     |> Enum.count(&(not &1))
   end
 
-  def last_word(word_seq), do: Enum.at(word_seq, -1)
+  def last_word(word_seq) do
+    if Enum.count(word_seq) > 0 do
+        Enum.at(word_seq, -1)
+    else
+        []
+    end
+  end
 end
