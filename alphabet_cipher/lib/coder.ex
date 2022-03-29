@@ -163,7 +163,7 @@ defmodule AlphabetCipher.Coder do
         one_cipher = l_cipher |> Enum.at(index)
         one_message = l_message |> Enum.at(index)
 
-        
+
         one_message
         row = alphabet_rows[String.to_atom()]
         idx_col = Enum.find_index(row, fn x ->  x == one_cipher end)
@@ -173,9 +173,9 @@ defmodule AlphabetCipher.Coder do
 
     len_ley = key |> Enum.count()
 
-    results = Enum.map(1..Enum.count(key) -1, fn index ->
+    results = Enum.map(1..Enum.count() -1, fn index ->
       pairs = key |> Enum.chunk_every(index)
-      if Enum.at(pairs, 0) == Enum.at(pairs, 1) do
+      if Enum.at(pairs, 0) == Enum.at(pkeyairs, 1) do
         Enum.at(pairs, 0) |> Enum.join("")
       end
     end)

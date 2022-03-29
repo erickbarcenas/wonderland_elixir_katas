@@ -101,7 +101,7 @@ defmodule Doublets.Solver do
     response = pairs_near_to_ending_word
     |> Enum.map(fn row ->
       get_valid_type(starting_word, ending_word, row)
-    end)
+      end)
     |> List.flatten()
     |> Enum.uniq()
 
