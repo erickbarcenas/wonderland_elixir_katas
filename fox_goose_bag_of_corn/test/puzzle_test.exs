@@ -4,19 +4,23 @@ defmodule FoxGooseBagOfCorn.PuzzleTest do
   import  FoxGooseBagOfCorn.Puzzle
 
   def validate_move(new_step, prev_step) do
-    diff1 = MapSet.difference prev_step, new_step
-    diff2 = MapSet.difference new_step, prev_step
-    diffs = MapSet.union diff1, diff2
-    diff_num = MapSet.size diffs
+    diff1 = MapSet.difference(prev_step, new_step)
+    diff2 = MapSet.difference(new_step, prev_step)
+    diffs = MapSet.union(diff1, diff2)
+    diff_num = MapSet.size(diffs)
+
     assert 3 > diff_num
+
     if diff_num > 0 do
       assert MapSet.member?(diffs, :you)
     end
+
     new_step
   end
 
   def assert_equal_list_of_sets(expected, calculated) do
     assert length(expected) == length(calculated)
+    
     Enum.zip(expected, calculated)
       |> Enum.each(fn {exp, calc} ->
            assert MapSet.equal?(exp, calc)

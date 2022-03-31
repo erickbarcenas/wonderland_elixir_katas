@@ -69,3 +69,58 @@ Copyright © 2014 Carin Meier
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
 
+```elixir
+defmodule RecursiveExample do
+  def action(path, []) do
+    Enum.reverse(path)
+  end
+  def action(path, tail) do
+    [head | tail] = tail
+    path = [ tail | path]
+    action(path, tail)
+  end
+  def list_list(list) do
+    path = [ list | []]
+    [head, head2 | tail] = list
+    path = [ tail | path]
+    action(path, tail)
+  end
+end
+```
+```elixir
+defmodule RecursiveExample do
+  def action(path, []) do
+    path
+  end
+  def action(path, tail) do
+    [head | tail] = tail
+    path = [ tail | path]
+    action(path, tail)
+  end
+  def list_list(list) do
+    path = [ list | []]
+    [head | tail] = list
+    path = [ tail | path]
+    action(path, tail)
+  end
+end
+```
+
+
+```elixir
+[
+  [[:fox, :goose, :corn, :you], [:boat], []]
+]
+```
+
+```
+defmodule SigilExample do
+  def sigil_H(str) do
+    str |> String.split(" ")
+        |> Enum.filter(&String.length(&1) > 0)
+        |> Enum.map(&String.replace(&1,":",""))
+        |> Enum.map(&String.to_atom/1)
+        |> Enum.into(MapSet.new)
+  end
+end
+```
